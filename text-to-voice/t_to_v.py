@@ -9,9 +9,12 @@ text='''To learn Python Programming online with regular LIVE CLASSES, enroll now
  
 '''
 
+file_name=""
 
+with open("cp-1.txt","r") as f:
+    data=f.read()
 
-
+print(data)
 
 
 '''
@@ -22,10 +25,8 @@ to change the accents
 "fr" for french,
 '''
 
-sound = gtts.gTTS(text, lang="en")
+# sound = gtts.gTTS(str(data), lang="en")
 
+# sound.save("chaper-1.mp3")
 
-
-sound.save("textsound.mp3")
-
-playsound.playsound("textsound.mp3")
+# playsound.playsound("textsound.mp3")
