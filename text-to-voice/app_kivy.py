@@ -3,34 +3,39 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.textinput import TextInput
 from kivy.uix.button import Button
 from kivy.uix.label import Label
+from speech_text import Dictation
 
 
 class MyApp(App):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.dictation = Dictation()
     def build(self):
-        self.layout = BoxLayout(orientation='vertical', padding=10, spacing=10)
+        self.title = "Text to Voice"
+        layout = BoxLayout(orientation='vertical', padding=10, spacing=10)
 
-        self.text_input = TextInput(hint_text="Enter your name")
-        self.button = Button(text="Say Hello")
-        self.button2 = Button(text="Clear")
-        self.label = Label(text="")
+        self.text_input = TextInput(hint_text="Enter text here...", size_hint=(1, 0.6))
+        layout.add_widget(self.text_input)
 
-        self.button.bind(on_press=self.say_hello)
-        self.button2.bind(on_press=self.clear_text)
+        button_layout = BoxLayout(orientation='horizontal', spacing=10, size_hint=(1, 0.2))
 
-        self.layout.add_widget(self.text_input)
-        self.layout.add_widget(self.button)
-        self.layout.add_widget(self.button2)
-        self.layout.add_widget(self.label)
+        speak_button = Button(text="Speak", on_press=self.speak_text)
+        button_layout.add_widget(speak_button)
 
-        return self.layout
+        record_button = Button(text="Record Voice", on_press=self.record_voice)
+        button_layout.add_widget(record_button)
 
-    def say_hello(self, instance):
-        name = self.text_input.text
-        self.label.text = f"Hello, {name}!"
+        layout.add_widget(button_layout)
 
-    def clear_text(self, instance):
-        self.text_input.text = ""
-        self.label.text = ""
+        return layout
+
+    def speak_text(self, instance):
+        text = self.text_input.text
+        self.dictation.tell(text)
+        
+
+    def record_voice(self, instance):
+        pass  # Implement voice recording functionality here
 
 
 if __name__ == "__main__":

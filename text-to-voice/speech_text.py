@@ -18,9 +18,9 @@ load_dotenv()
 
 class Dictation:
     speed=125
-    topic="any topic"
+    topic="anyone like('history', 'future', 'economy',' mathematics', 'physics')"
 
-    pause_constant=50
+    pause_constant=25
     
 
     def __init__(self):
@@ -31,7 +31,7 @@ class Dictation:
         
     def text_generate(self):
         try:
-            response = self.model.generate_content(f"give latest and interesting information about the topic in 50 words and use professional words on topic {self.topic}" )
+            response = self.model.generate_content(f"give formal information about the topic in 50 words and use professional words on topic {self.topic}" )
             text= response.text
             print(text)
             # self.speech(txt)
@@ -68,7 +68,13 @@ class Dictation:
         print(f"Speed updated to {cls.pause_constant} words per minute")
 
 
+if __name__=="__main__":
+    d=Dictation()
+    d.speech()
+    while(True):
+        a=input('Enter q to quit: \n')
+        if a=='q':
+	        break
 
+		
 
-d=Dictation()
-d.speech()
