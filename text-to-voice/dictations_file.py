@@ -4,25 +4,17 @@ import google.generativeai as genai
 import os
 from dotenv import load_dotenv
 load_dotenv()
+import datetime
+import random
 
-
-# Replace "YOUR_API_KEY" with your actual Google  API key
-# genai.configure(api_key=os.getenv("GOOGLE_API_KEY")) 
-
-# # For a synchronous call (most common for simple requests)
-# model = genai.GenerativeModel('gemini-2.5-flash') # Using 'gemini-pro' as 'gemini-2.5-flash' might be a future or internal model name\
-# topic="Space "
-# response = model.generate_content(f"give latest and interesting information about the topic in 5 lines and use professional words:\n topic:-{topic}" )
-# txt= response.text
-# print(txt)
 
 class Dictation:
     speed=125
-    topic="anyone like('history', 'future', 'economy',' mathematics', 'physics')"
+
+    topic="anyone like ('history', 'future', 'economy','mathematics', 'physics', 'philosophy', 'science', 'technology', 'biology', 'chemistry', 'geography', 'politics')"
 
     pause_constant=25
     
-
     def __init__(self):
         
         genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
@@ -31,7 +23,18 @@ class Dictation:
         
     def text_generate(self):
         try:
-            response = self.model.generate_content(f"give formal information about the topic in 50 words and use professional words on topic {self.topic}" )
+            # Generate random datetime
+            random_year = random.randint(1900, 2100)
+            random_month = random.randint(1, 12)
+            random_day = random.randint(1, 28)
+            random_hour = random.randint(0, 23)
+            random_minute = random.randint(0, 59)
+            random_second = random.randint(0, 59)
+            random_datetime = datetime.datetime(random_year, random_month, random_day, random_hour, random_minute, random_second)
+            # Updated prompt to request a new paragraph each time, even for the same topic
+            response = self.model.generate_content(f"Write a paragraph about the any of the topic in 50 words using professional words according to time {random_datetime.isoformat()}" )
+            
+            
             text= response.text
             print(text)
             # self.speech(txt)
@@ -41,10 +44,16 @@ class Dictation:
             print(text)
             return text
 
-    def tell(self, txt:str, speed=speed):
+    def tell(self, txt: str, speed=None, voice_id=0):
+        if speed is None:
+            speed = Dictation.speed
         engine = pyttsx3.init()
         if speed:
             engine.setProperty('rate', value=speed)
+        if voice_id:
+            voices = engine.getProperty('voices')
+            if voice_id < len(voices):
+                engine.setProperty('voice', voices[voice_id].id)
         engine.say(txt)
         engine.runAndWait()
         engine.stop()
@@ -73,8 +82,10 @@ if __name__=="__main__":
     d.speech()
     while(True):
         a=input('Enter q to quit: \n')
+        if a=='s':
+            d.speech()
         if a=='q':
-	        break
+            break
 
-		
+
 

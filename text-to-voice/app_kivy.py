@@ -3,7 +3,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.textinput import TextInput
 from kivy.uix.button import Button
 from kivy.uix.label import Label
-from speech_text import Dictation
+from dictations_file import Dictation
 
 
 class MyApp(App):
